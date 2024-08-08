@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WRITE_ORG_CLASSIC }}
         
       - name: Append commit SHA to file
         run: |
@@ -31,5 +31,5 @@ jobs:
           # git remote set-url origin https://x-access-token:${{ secrets.WRITE_ORG_CLASSIC }}@github.com/${{ github.repository }}.git
           git push origin HEAD
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.WRITE_ORG_CLASSIC }}
    
