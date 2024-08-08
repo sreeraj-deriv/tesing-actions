@@ -1,0 +1,35 @@
+# .github/workflows/update-commit-sha.yml new
+name: Update commit_sha.txt
+
+on:
+  workflow_call:
+
+jobs:
+  update-commit-sha:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.SSH_KEY_READ }}
+        
+      - name: Append commit SHA to file
+        run: |
+          echo "${GITHUB_SHA}" >> commit_sha.txt
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Commit changes
+        run: |
+          git add commit_sha.txt
+          git commit -m "Add commit SHA ${GITHUB_SHA}"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin HEAD:${{ github.ref }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   
