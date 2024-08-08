@@ -1,0 +1,16 @@
+name: Call Update commit_sha.txt
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  call-update-commit-sha:
+    uses: ./.github/workflows/commit_sha.yml
+    secrets: inherit
+    permissions:
+      contents: write
