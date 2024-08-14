@@ -7,9 +7,9 @@ on:
 jobs:
   update-commit-sha:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    # permissions:
+    #   contents: write
+    #   pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
       - name: Configure Git
         run: |
           echo ${{ secrets.PULL_WRITE_PAT }}
-          TESTMAN="tikki${{ secrets.PULL_WRITE_PAT }}2"
+          TESTMAN="tikki${{ secrets.CONTENT_PULL_WRITE_PAT }}2"
           STRING1="Hello,"
           STRING2=" World!$TESTMAN!"
           CONCATENATED="$STRING1$STRING2"
