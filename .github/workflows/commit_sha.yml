@@ -13,8 +13,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.PULL_WRITE_PAT}}
+        
         
       - name: Append commit SHA to file
         run: |
