@@ -7,9 +7,9 @@ on:
 jobs:
   update-commit-sha:
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: write
-    #   pull-requests: write
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
 
       - name: Commit changes
         env:
-          GH_TOKEN: ${{ secrets.PULL_WRITE_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Set up Git
           git config --global user.name 'github-actions[bot]'
