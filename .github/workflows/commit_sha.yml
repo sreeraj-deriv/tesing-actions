@@ -49,7 +49,7 @@ jobs:
           PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
         
           # Auto-merge the pull request
-          gh pr merge -m "[ci skip]" $PR_NUMBER --merge --admin
+          gh pr merge $PR_NUMBER --merge --admin --body "[ci skip]"
         
           # Delete the branch after merging
           git push origin --delete update-image-digest-${{ github.sha }}
