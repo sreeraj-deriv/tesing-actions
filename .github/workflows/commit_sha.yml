@@ -56,9 +56,8 @@ jobs:
         
           # Delete the branch after merging
           git push origin --delete update-image-digest-${{ github.sha }}
-        
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+
 
 
       # - name: Commit changes
