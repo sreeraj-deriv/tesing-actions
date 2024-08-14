@@ -39,9 +39,6 @@ jobs:
           git add commit_sha.txt
           git commit -m "Add Docker image tag and digest [ci skip]"
         
-          # Set the repository URL with GITHUB_TOKEN
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        
           # Push changes to the new branch
           git push origin HEAD:update-image-digest-${{ github.sha }}
         
@@ -52,7 +49,7 @@ jobs:
           PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
         
           # Auto-merge the pull request
-          gh pr merge $PR_NUMBER --merge --admin
+          gh pr merge -m "[ci skip]" $PR_NUMBER --merge --admin
         
           # Delete the branch after merging
           git push origin --delete update-image-digest-${{ github.sha }}
