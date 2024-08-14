@@ -26,25 +26,60 @@ jobs:
 
       - name: Commit changes
         run: |
-          # git add commit_sha.txt
-          # git commit -m "Add commit SHA ${GITHUB_SHA}"
-          # # git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          # git push origin HEAD
-            git config --global user.name 'github-actions[bot]'
-            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-            git checkout -b update-image-digest-${{ github.sha }}
-            git add commit_sha.txt
-            git commit -m "Add Docker image tag and digest [ci skip]"
-            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-            git push origin HEAD:update-image-digest-${{ github.sha }}
+          # Set up Git
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         
-            # Create a pull request
-            gh pr create --title "Update image digest" --body "pr body" --head update-image-digest-${{ github.sha }} --base master
+          # Checkout a new branch
+          git checkout -b update-image-digest-${{ github.sha }}
         
-            # Auto-merge the PR and delete the branch
-            PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
-            gh pr merge $PR_NUMBER --merge
-            git push origin --delete update-image-digest-${{ github.sha }}
+          # Add changes and commit
+          git add commit_sha.txt
+          git commit -m "Add Docker image tag and digest [ci skip]"
+        
+          # Set the repository URL with GITHUB_TOKEN
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        
+          # Push changes to the new branch
+          git push origin HEAD:update-image-digest-${{ github.sha }}
+        
+          # Create a pull request using GitHub CLI
+          gh pr create --title "Update image digest" --body "This PR updates the Docker image digest." --head update-image-digest-${{ github.sha }} --base master
+          
+          # Fetch the PR number for auto-merge
+          PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
+        
+          # Auto-merge the pull request
+          gh pr merge $PR_NUMBER --merge
+        
+          # Delete the branch after merging
+          git push origin --delete update-image-digest-${{ github.sha }}
+        
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      # - name: Commit changes
+      #   run: |
+      #     # git add commit_sha.txt
+      #     # git commit -m "Add commit SHA ${GITHUB_SHA}"
+      #     # # git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+      #     # git push origin HEAD
+      #       git config --global user.name 'github-actions[bot]'
+      #       git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      #       git checkout -b update-image-digest-${{ github.sha }}
+      #       git add commit_sha.txt
+      #       git commit -m "Add Docker image tag and digest [ci skip]"
+      #       git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+      #       git push origin HEAD:update-image-digest-${{ github.sha }}
+        
+      #       # Create a pull request
+      #       gh pr create --title "Update image digest" --body "pr body" --head update-image-digest-${{ github.sha }} --base master
+        
+      #       # Auto-merge the PR and delete the branch
+      #       PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
+      #       gh pr merge $PR_NUMBER --merge
+      #       git push origin --delete update-image-digest-${{ github.sha }}
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
    
