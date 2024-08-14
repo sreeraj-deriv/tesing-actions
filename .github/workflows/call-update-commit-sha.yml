@@ -13,5 +13,5 @@ jobs:
     uses: ./.github/workflows/commit_sha.yml
     secrets: inherit
     permissions:
-      contents: write
+      # contents: write
       pull-requests: write
