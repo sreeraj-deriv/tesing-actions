@@ -39,7 +39,7 @@ jobs:
             git push origin HEAD:update-image-digest-${{ github.sha }}
         
             # Create a pull request
-            gh pr create --title "Update image digest" --head update-image-digest-${{ github.sha }} --base master
+            gh pr create --title "Update image digest" --body "pr body" --head update-image-digest-${{ github.sha }} --base master
         
             # Auto-merge the PR and delete the branch
             PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
