@@ -26,7 +26,7 @@ jobs:
 
       - name: Commit changes
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PULL_WRITE_PAT }}
         run: |
           # Set up Git
           git config --global user.name 'github-actions[bot]'
