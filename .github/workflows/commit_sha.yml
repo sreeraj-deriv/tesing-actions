@@ -22,8 +22,11 @@ jobs:
       - name: Configure Git
         run: |
           echo ${{ secrets.PULL_WRITE_PAT }}
-          TESTMAN=${{ secrets.PULL_WRITE_PAT }}
-          echo "The value of MY_VAR is: $TESTMAN"
+          TESTMAN="tikki${{ secrets.PULL_WRITE_PAT }}2"
+          STRING1="Hello,"
+          STRING2=" World!$TESTMAN!"
+          CONCATENATED="$STRING1$STRING2"
+          echo "Concatenated String: $CONCATENATED"
       
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
