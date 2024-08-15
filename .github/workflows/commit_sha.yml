@@ -41,7 +41,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         
           # Checkout a new branch
-          git checkout -b update-image-digest-${{ github.sha }}
+          git checkout -b uppdate-image-digest-${{ github.sha }}
         
           # Add changes and commit
           git add commit_sha.txt
