@@ -39,22 +39,24 @@ jobs:
           # Set up Git
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+          branch_name=uppdate-image-digest-${{ github.sha }}
         
           # Checkout a new branch
-          git checkout -b uppdate-image-digest-${{ github.sha }}
+          git checkout -b ${branch_name}
         
           # Add changes and commit
           git add commit_sha.txt
           git commit -m "Add Docker image tag and digest [ci skip]"
         
           # Push changes to the new branch
-          git push origin HEAD:update-image-digest-${{ github.sha }}
+          git push origin HEAD:${branch_name}
         
           # Create a pull request using GitHub CLI
-          gh pr create --title "Update image digest" --body "This PR updates the Docker image digest." --head update-image-digest-${{ github.sha }} --base main
+          gh pr create --title "Update image digest" --body "This PR updates the Docker image digest." --head ${branch_name} --base main
           
           # Fetch the PR number for auto-merge
-          PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
+          PR_NUMBER=$(gh pr list --state open --head ${branch_name} --json number --jq '.[0].number')
         
           # Auto-merge the pull request
           gh pr merge $PR_NUMBER --merge --admin --delete-branch --body "[ci skip]"
