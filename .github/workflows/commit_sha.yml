@@ -59,7 +59,7 @@ jobs:
           PR_NUMBER=$(gh pr list --state open --head ${branch_name} --json number --jq '.[0].number')
         
           # Auto-merge the pull request
-          gh pr merge $PR_NUMBER --merge --admin --delete-branch --body "[ci skip]"
+          gh pr merge $PR_NUMBER --merge --delete-branch --body "[ci skip]"
         
              
 
