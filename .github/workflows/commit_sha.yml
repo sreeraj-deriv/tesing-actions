@@ -40,7 +40,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-          branch_name=uppdate-image-digest-${{ github.sha }}
+          branch_name=update-image-digest-${{ github.sha }}
         
           # Checkout a new branch
           git checkout -b ${branch_name}
