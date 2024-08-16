@@ -50,6 +50,7 @@ jobs:
           git commit -m "Add Docker image tag and digest [ci skip]"
         
           # Push changes to the new branch
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin HEAD:${branch_name}
         
           # Create a pull request using GitHub CLI
