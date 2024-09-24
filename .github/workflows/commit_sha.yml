@@ -9,11 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
+     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN}}
+        
         
       - name: Append commit SHA to file
         run: |
@@ -21,6 +22,13 @@ jobs:
       
       - name: Configure Git
         run: |
+          echo ${{ secrets.PULL_WRITE_PAT }}
+          TESTMAN="tikki${{ secrets.CONTENT_PULL_WRITE_PAT }}2"
+          STRING1="Hello,"
+          STRING2=" World!$TESTMAN!"
+          CONCATENATED="$STRING1$STRING2"
+          echo "Concatenated String: $CONCATENATED"
+      
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
@@ -31,32 +39,30 @@ jobs:
           # Set up Git
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+          branch_name=update-image-digest-${{ github.sha }}
         
           # Checkout a new branch
-          git checkout -b update-image-digest-${{ github.sha }}
+          git checkout -b ${branch_name}
         
           # Add changes and commit
           git add commit_sha.txt
           git commit -m "Add Docker image tag and digest [ci skip]"
         
-          # Set the repository URL with GITHUB_TOKEN
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        
           # Push changes to the new branch
-          git push origin HEAD:update-image-digest-${{ github.sha }}
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin HEAD:${branch_name}
         
           # Create a pull request using GitHub CLI
-          gh pr create --title "Update image digest" --body "This PR updates the Docker image digest." --head update-image-digest-${{ github.sha }} --base master
+          gh pr create --title "Update image digest" --body "This PR updates the Docker image digest." --head ${branch_name} --base main
           
           # Fetch the PR number for auto-merge
-          PR_NUMBER=$(gh pr list --state open --head update-image-digest-${{ github.sha }} --json number --jq '.[0].number')
+          PR_NUMBER=$(gh pr list --state open --head ${branch_name} --json number --jq '.[0].number')
         
           # Auto-merge the pull request
-          gh pr merge $PR_NUMBER --merge
+          gh pr merge $PR_NUMBER --merge --delete-branch --body "[ci skip]"
         
-          # Delete the branch after merging
-          git push origin --delete update-image-digest-${{ github.sha }}
-      
+             
 
 
 
